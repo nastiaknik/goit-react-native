@@ -13,7 +13,6 @@ const createStyles = (dimensions) => {
       justifyContent: "flex-end",
       alignItems: "center",
       width: dimensions.width,
-      height: dimensions.height,
     },
     form: {
       alignItems: "center",

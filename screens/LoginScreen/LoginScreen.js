@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -11,6 +11,7 @@ import {
   Keyboard,
   ScrollView,
   Platform,
+  Alert,
 } from "react-native";
 import createStyles from "./LoginScreenStyles";
 
@@ -60,16 +61,44 @@ const LoginScreen = () => {
     };
   }, []);
 
-  const handleSubmit = () => {
-    console.log(`Email: ${email}, password: ${password}`);
-    setEmail("");
-    setPassword("");
-    keyboardHide();
-  };
-
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
+  };
+
+  const handleSubmit = () => {
+    if (validateEmail() && validatePassword()) {
+      Alert.alert("Success", "Logged in successfully.");
+      keyboardHide();
+      console.log(`Email: ${email}, password: ${password} `);
+      setEmail("");
+      setPassword("");
+    }
+  };
+
+  const validateEmail = () => {
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (!email.trim()) {
+      Alert.alert("Error", "Please enter your email.");
+      return false;
+    }
+    if (!emailRegex.test(email.trim())) {
+      Alert.alert("Error", "Please enter a valid email address.");
+      return false;
+    }
+    return true;
+  };
+
+  const validatePassword = () => {
+    if (!password.trim()) {
+      Alert.alert("Error", "Please enter your password.");
+      return false;
+    }
+    if (password.trim().length < 6) {
+      Alert.alert("Error", "Password should be at least 6 characters long.");
+      return false;
+    }
+    return true;
   };
 
   return (
@@ -101,7 +130,7 @@ const LoginScreen = () => {
                 placeholder="Адреса електронної пошти"
                 placeholderTextColor="#BDBDBD"
                 value={email}
-                onChangeText={() => setEmail(email)}
+                onChangeText={(email) => setEmail(email)}
                 onFocus={() => {
                   setIsEmailFocused(true);
                   setIsShowKeyboard(true);
@@ -121,7 +150,7 @@ const LoginScreen = () => {
                   placeholderTextColor="#BDBDBD"
                   secureTextEntry={isPasswordHidden}
                   value={password}
-                  onChangeText={() => setPassword(password)}
+                  onChangeText={(password) => setPassword(password)}
                   onFocus={() => {
                     setIsPasswordFocused(true);
                     setIsShowKeyboard(true);

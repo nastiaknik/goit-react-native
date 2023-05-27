@@ -15,6 +15,7 @@ import {
   Keyboard,
   ScrollView,
   Platform,
+  Alert,
 } from "react-native";
 import createStyles from "./RegistrationScreenStyles";
 
@@ -52,7 +53,7 @@ const RegistrationScreen = () => {
       keyboardDidHideListener.remove();
       keyboardDidShowListener.remove();
     };
-  }, [Keyboard]);
+  }, []);
 
   useEffect(() => {
     const handleOrientationChange = ({ window }) => {
@@ -67,11 +68,14 @@ const RegistrationScreen = () => {
   }, []);
 
   const handleSubmit = () => {
-    keyboardHide();
-    console.log(`login: ${login}, email: ${email}, password: ${password} `);
-    setLogin("");
-    setEmail("");
-    setPassword("");
+    if (validateLogin() && validateEmail() && validatePassword()) {
+      Alert.alert("Success", "Registered successfully.");
+      keyboardHide();
+      console.log(`login: ${login}, email: ${email}, password: ${password} `);
+      setLogin("");
+      setEmail("");
+      setPassword("");
+    }
   };
 
   const keyboardHide = () => {
@@ -98,6 +102,39 @@ const RegistrationScreen = () => {
     if (!result.canceled) {
       setSelectedImageUri(`data:image/jpeg;base64,${result.base64}`);
     }
+  };
+
+  const validateLogin = () => {
+    if (!login.trim()) {
+      Alert.alert("Error", "Please enter your login.");
+      return false;
+    }
+    return true;
+  };
+
+  const validateEmail = () => {
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (!email.trim()) {
+      Alert.alert("Error", "Please enter your email.");
+      return false;
+    }
+    if (!emailRegex.test(email.trim())) {
+      Alert.alert("Error", "Please enter a valid email address.");
+      return false;
+    }
+    return true;
+  };
+
+  const validatePassword = () => {
+    if (!password.trim()) {
+      Alert.alert("Error", "Please enter your password.");
+      return false;
+    }
+    if (password.trim().length < 6) {
+      Alert.alert("Error", "Password should be at least 6 characters long.");
+      return false;
+    }
+    return true;
   };
 
   return (
