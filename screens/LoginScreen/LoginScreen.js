@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -10,8 +10,10 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   ScrollView,
+  Platform,
+  Alert,
 } from "react-native";
-import styles from "./LoginScreenStyles";
+import createStyles from "./LoginScreenStyles";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
@@ -20,22 +22,83 @@ const LoginScreen = () => {
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [isEmailFocused, setIsEmailFocused] = useState(false);
+  const [screenDimensions, setScreenDimensions] = useState(
+    Dimensions.get("window")
+  );
+  const styles = createStyles(screenDimensions);
 
-  const onEmailChange = (email) => {
-    setEmail(email);
-  };
-  const onPasswordChange = (password) => {
-    setPassword(password);
-  };
-  const handleSubmit = () => {
-    keyboardHide();
-    setEmail("");
-    setPassword("");
-    console.log(email, password);
-  };
+  const { width, height } = screenDimensions;
+
+  useEffect(() => {
+    const handleOrientationChange = ({ window }) => {
+      setScreenDimensions(window);
+    };
+
+    Dimensions.addEventListener("change", handleOrientationChange);
+
+    return () => {
+      Dimensions.removeEventListener("change", handleOrientationChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      () => {
+        setIsShowKeyboard(true);
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        setIsShowKeyboard(false);
+      }
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
+
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
+  };
+
+  const handleSubmit = () => {
+    if (validateEmail() && validatePassword()) {
+      Alert.alert("Success", "Logged in successfully.");
+      keyboardHide();
+      console.log(`Email: ${email}, password: ${password} `);
+      setEmail("");
+      setPassword("");
+    }
+  };
+
+  const validateEmail = () => {
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (!email.trim()) {
+      Alert.alert("Error", "Please enter your email.");
+      return false;
+    }
+    if (!emailRegex.test(email.trim())) {
+      Alert.alert("Error", "Please enter a valid email address.");
+      return false;
+    }
+    return true;
+  };
+
+  const validatePassword = () => {
+    if (!password.trim()) {
+      Alert.alert("Error", "Please enter your password.");
+      return false;
+    }
+    if (password.trim().length < 6) {
+      Alert.alert("Error", "Password should be at least 6 characters long.");
+      return false;
+    }
+    return true;
   };
 
   return (
@@ -54,8 +117,8 @@ const LoginScreen = () => {
             <View
               style={{
                 ...styles.form,
-                width: Dimensions.get("window").width,
-                paddingBottom: isShowKeyboard ? 32 : 144,
+                width,
+                paddingBottom: !isShowKeyboard && height > width ? 144 : 32,
               }}
             >
               <Text style={styles.title}>Увійти</Text>
@@ -67,7 +130,7 @@ const LoginScreen = () => {
                 placeholder="Адреса електронної пошти"
                 placeholderTextColor="#BDBDBD"
                 value={email}
-                onChangeText={onEmailChange}
+                onChangeText={(email) => setEmail(email)}
                 onFocus={() => {
                   setIsEmailFocused(true);
                   setIsShowKeyboard(true);
@@ -87,7 +150,7 @@ const LoginScreen = () => {
                   placeholderTextColor="#BDBDBD"
                   secureTextEntry={isPasswordHidden}
                   value={password}
-                  onChangeText={onPasswordChange}
+                  onChangeText={(password) => setPassword(password)}
                   onFocus={() => {
                     setIsPasswordFocused(true);
                     setIsShowKeyboard(true);
@@ -109,7 +172,11 @@ const LoginScreen = () => {
                 </TouchableOpacity>
               </View>
 
-              <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
+              <TouchableOpacity
+                activeOpacity={0.9}
+                style={styles.btn}
+                onPress={handleSubmit}
+              >
                 <Text style={styles.btnText}>Увійти</Text>
               </TouchableOpacity>
 
