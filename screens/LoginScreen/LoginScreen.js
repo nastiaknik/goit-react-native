@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -10,8 +10,9 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   ScrollView,
+  Platform,
 } from "react-native";
-import styles from "./LoginScreenStyles";
+import createStyles from "./LoginScreenStyles";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
@@ -20,19 +21,52 @@ const LoginScreen = () => {
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [isEmailFocused, setIsEmailFocused] = useState(false);
+  const [screenDimensions, setScreenDimensions] = useState(
+    Dimensions.get("window")
+  );
+  const styles = createStyles(screenDimensions);
 
-  const onEmailChange = (email) => {
-    setEmail(email);
-  };
-  const onPasswordChange = (password) => {
-    setPassword(password);
-  };
+  const { width, height } = screenDimensions;
+
+  useEffect(() => {
+    const handleOrientationChange = ({ window }) => {
+      setScreenDimensions(window);
+    };
+
+    Dimensions.addEventListener("change", handleOrientationChange);
+
+    return () => {
+      Dimensions.removeEventListener("change", handleOrientationChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      () => {
+        setIsShowKeyboard(true);
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        setIsShowKeyboard(false);
+      }
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
+
   const handleSubmit = () => {
-    keyboardHide();
+    console.log(`Email: ${email}, password: ${password}`);
     setEmail("");
     setPassword("");
-    console.log(email, password);
+    keyboardHide();
   };
+
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
@@ -54,8 +88,8 @@ const LoginScreen = () => {
             <View
               style={{
                 ...styles.form,
-                width: Dimensions.get("window").width,
-                paddingBottom: isShowKeyboard ? 32 : 144,
+                width,
+                paddingBottom: !isShowKeyboard && height > width ? 144 : 32,
               }}
             >
               <Text style={styles.title}>Увійти</Text>
@@ -67,7 +101,7 @@ const LoginScreen = () => {
                 placeholder="Адреса електронної пошти"
                 placeholderTextColor="#BDBDBD"
                 value={email}
-                onChangeText={onEmailChange}
+                onChangeText={() => setEmail(email)}
                 onFocus={() => {
                   setIsEmailFocused(true);
                   setIsShowKeyboard(true);
@@ -87,7 +121,7 @@ const LoginScreen = () => {
                   placeholderTextColor="#BDBDBD"
                   secureTextEntry={isPasswordHidden}
                   value={password}
-                  onChangeText={onPasswordChange}
+                  onChangeText={() => setPassword(password)}
                   onFocus={() => {
                     setIsPasswordFocused(true);
                     setIsShowKeyboard(true);
@@ -109,7 +143,11 @@ const LoginScreen = () => {
                 </TouchableOpacity>
               </View>
 
-              <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
+              <TouchableOpacity
+                activeOpacity={0.9}
+                style={styles.btn}
+                onPress={handleSubmit}
+              >
                 <Text style={styles.btnText}>Увійти</Text>
               </TouchableOpacity>
 

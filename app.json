@@ -3,7 +3,7 @@
     "name": "goit-react-native",
     "slug": "goit-react-native",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "default",
     "icon": "./assets/images/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
