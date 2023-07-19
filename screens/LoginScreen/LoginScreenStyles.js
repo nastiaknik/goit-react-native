@@ -99,6 +99,7 @@ const createStyles = (dimensions) => {
     },
     underlinedText: {
       textDecorationLine: "underline",
+      padding: 16,
     },
   });
 };

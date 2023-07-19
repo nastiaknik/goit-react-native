@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import AddIcon from "react-native-vector-icons/Ionicons";
 import CancelIcon from "react-native-vector-icons/Ionicons";
 import * as ImagePicker from "expo-image-picker";
@@ -20,6 +21,8 @@ import {
 import createStyles from "./RegistrationScreenStyles";
 
 const RegistrationScreen = () => {
+  const navigation = useNavigation();
+
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -75,6 +78,7 @@ const RegistrationScreen = () => {
       setLogin("");
       setEmail("");
       setPassword("");
+      navigation.navigate("Posts");
     }
   };
 
@@ -243,10 +247,15 @@ const RegistrationScreen = () => {
                 <Text style={styles.btnText}>Зареєструватися</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => {}} activeOpacity={0.9}>
+              <TouchableOpacity activeOpacity={1}>
                 <Text style={styles.loginText}>
                   Вже є акаунт?{" "}
-                  <Text style={styles.underlinedText}>Увійти</Text>
+                  <Text
+                    style={styles.underlinedText}
+                    onPress={() => navigation.navigate("Login")}
+                  >
+                    Увійти
+                  </Text>
                 </Text>
               </TouchableOpacity>
             </View>

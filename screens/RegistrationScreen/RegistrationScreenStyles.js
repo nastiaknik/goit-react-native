@@ -5,7 +5,7 @@ const createStyles = (dimensions) => {
     bgImage: {
       flex: 1,
       resizeMode: "cover",
-      width: dimensions.weight,
+      width: dimensions.width,
       height: dimensions.height + 142,
     },
     scrollViewContent: {
@@ -13,6 +13,7 @@ const createStyles = (dimensions) => {
       justifyContent: "flex-end",
       alignItems: "center",
       width: dimensions.width,
+      height: dimensions.height,
     },
     form: {
       alignItems: "center",
@@ -111,6 +112,7 @@ const createStyles = (dimensions) => {
     },
     underlinedText: {
       textDecorationLine: "underline",
+      padding: 16,
     },
   });
 };
