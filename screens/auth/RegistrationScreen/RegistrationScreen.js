@@ -59,8 +59,8 @@ const RegistrationScreen = () => {
   }, []);
 
   useEffect(() => {
-    const handleOrientationChange = ({ window }) => {
-      setScreenDimensions(window);
+    const handleOrientationChange = ({ window: { width, height } }) => {
+      setScreenDimensions({ width, height });
     };
 
     Dimensions.addEventListener("change", handleOrientationChange);
@@ -72,13 +72,12 @@ const RegistrationScreen = () => {
 
   const handleSubmit = () => {
     if (validateLogin() && validateEmail() && validatePassword()) {
-      Alert.alert("Success", "Registered successfully.");
       keyboardHide();
       console.log(`login: ${login}, email: ${email}, password: ${password} `);
       setLogin("");
       setEmail("");
       setPassword("");
-      navigation.navigate("Posts");
+      navigation.navigate("Home");
     }
   };
 
@@ -145,7 +144,7 @@ const RegistrationScreen = () => {
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <ImageBackground
         style={styles.bgImage}
-        source={require("../../assets/images/background-image.jpg")}
+        source={require("../../../assets/images/background-image.jpg")}
       >
         <KeyboardAvoidingView behavior={Platform.OS === "ios" && "padding"}>
           <ScrollView

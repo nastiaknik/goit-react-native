@@ -38,7 +38,6 @@ const createStyles = (dimensions) => {
       position: "absolute",
       right: -13,
       bottom: 14,
-      paddding: 15,
       width: 25,
       height: 25,
     },
@@ -54,7 +53,7 @@ const createStyles = (dimensions) => {
     },
     input: {
       width: "100%",
-      height: 50,
+      minHeight: 50,
       marginBottom: 16,
       paddingHorizontal: 16,
       paddingTop: 16,
@@ -68,7 +67,10 @@ const createStyles = (dimensions) => {
       backgroundColor: "#F6F6F6",
       color: "#212121",
     },
-    inputFocused: { borderColor: "#FF6C00", backgroundColor: "#ffffff" },
+    inputFocused: {
+      borderColor: "#FF6C00",
+      backgroundColor: "#ffffff",
+    },
     inputContainer: {
       position: "relative",
       width: "100%",

@@ -71,12 +71,11 @@ const LoginScreen = () => {
 
   const handleSubmit = () => {
     if (validateEmail() && validatePassword()) {
-      Alert.alert("Success", "Logged in successfully.");
       keyboardHide();
       console.log(`Email: ${email}, password: ${password} `);
       setEmail("");
       setPassword("");
-      navigation.navigate("Posts");
+      navigation.navigate("Home");
     }
   };
 
@@ -109,7 +108,7 @@ const LoginScreen = () => {
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <ImageBackground
         style={styles.bgImage}
-        source={require("../../assets/images/background-image.jpg")}
+        source={require("../../../assets/images/background-image.jpg")}
       >
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "position" : null}

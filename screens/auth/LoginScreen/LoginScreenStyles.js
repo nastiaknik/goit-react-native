@@ -35,7 +35,7 @@ const createStyles = (dimensions) => {
     },
     input: {
       width: "100%",
-      height: 50,
+      minHeight: 50,
       marginBottom: 16,
       paddingHorizontal: 16,
       paddingTop: 16,
