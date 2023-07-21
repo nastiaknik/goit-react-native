@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import AddIcon from "react-native-vector-icons/Ionicons";
 import CancelIcon from "react-native-vector-icons/Ionicons";
 import * as ImagePicker from "expo-image-picker";
@@ -20,6 +21,8 @@ import {
 import createStyles from "./RegistrationScreenStyles";
 
 const RegistrationScreen = () => {
+  const navigation = useNavigation();
+
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -56,8 +59,8 @@ const RegistrationScreen = () => {
   }, []);
 
   useEffect(() => {
-    const handleOrientationChange = ({ window }) => {
-      setScreenDimensions(window);
+    const handleOrientationChange = ({ window: { width, height } }) => {
+      setScreenDimensions({ width, height });
     };
 
     Dimensions.addEventListener("change", handleOrientationChange);
@@ -69,12 +72,12 @@ const RegistrationScreen = () => {
 
   const handleSubmit = () => {
     if (validateLogin() && validateEmail() && validatePassword()) {
-      Alert.alert("Success", "Registered successfully.");
       keyboardHide();
       console.log(`login: ${login}, email: ${email}, password: ${password} `);
       setLogin("");
       setEmail("");
       setPassword("");
+      navigation.navigate("Home");
     }
   };
 
@@ -141,7 +144,7 @@ const RegistrationScreen = () => {
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <ImageBackground
         style={styles.bgImage}
-        source={require("../../assets/images/background-image.jpg")}
+        source={require("../../../assets/images/background-image.jpg")}
       >
         <KeyboardAvoidingView behavior={Platform.OS === "ios" && "padding"}>
           <ScrollView
@@ -243,10 +246,15 @@ const RegistrationScreen = () => {
                 <Text style={styles.btnText}>Зареєструватися</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => {}} activeOpacity={0.9}>
+              <TouchableOpacity activeOpacity={1}>
                 <Text style={styles.loginText}>
                   Вже є акаунт?{" "}
-                  <Text style={styles.underlinedText}>Увійти</Text>
+                  <Text
+                    style={styles.underlinedText}
+                    onPress={() => navigation.navigate("Login")}
+                  >
+                    Увійти
+                  </Text>
                 </Text>
               </TouchableOpacity>
             </View>

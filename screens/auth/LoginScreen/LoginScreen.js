@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
 import {
   View,
   Text,
@@ -16,6 +17,8 @@ import {
 import createStyles from "./LoginScreenStyles";
 
 const LoginScreen = () => {
+  const navigation = useNavigation();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
@@ -68,11 +71,11 @@ const LoginScreen = () => {
 
   const handleSubmit = () => {
     if (validateEmail() && validatePassword()) {
-      Alert.alert("Success", "Logged in successfully.");
       keyboardHide();
       console.log(`Email: ${email}, password: ${password} `);
       setEmail("");
       setPassword("");
+      navigation.navigate("Home");
     }
   };
 
@@ -105,7 +108,7 @@ const LoginScreen = () => {
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <ImageBackground
         style={styles.bgImage}
-        source={require("../../assets/images/background-image.jpg")}
+        source={require("../../../assets/images/background-image.jpg")}
       >
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "position" : null}
@@ -180,10 +183,15 @@ const LoginScreen = () => {
                 <Text style={styles.btnText}>Увійти</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => {}} activeOpacity={0.9}>
+              <TouchableOpacity activeOpacity={1}>
                 <Text style={styles.registerText}>
                   Немає акаунту?{" "}
-                  <Text style={styles.underlinedText}>Зареєструватися</Text>
+                  <Text
+                    style={styles.underlinedText}
+                    onPress={() => navigation.navigate("Registration")}
+                  >
+                    Зареєструватися
+                  </Text>
                 </Text>
               </TouchableOpacity>
             </View>

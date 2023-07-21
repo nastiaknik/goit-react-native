@@ -1,35 +1,41 @@
-import { StyleSheet, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useFonts } from "expo-font";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import "react-native-gesture-handler";
 
-import RegistrationScreen from "./screens/RegistrationScreen/RegistrationScreen";
-/* import LoginScreen from "./screens/LoginScreen/LoginScreen"; */
+import Authorization from "./screens/auth/Auth";
+import HomeScreen from "./screens/main/HomeScreen/HomeScreen";
 
 export default function App() {
+  const { Screen, Navigator } = createStackNavigator();
+
   const [fontsLoaded] = useFonts({
     "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
     "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
     "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
   });
-
   if (!fontsLoaded) {
     return null;
   }
 
   return (
-    <View style={styles.container}>
-      <RegistrationScreen />
-      {/* <LoginScreen /> */}
+    <>
+      <NavigationContainer>
+        <Navigator>
+          <Screen
+            name="Authorization"
+            component={Authorization}
+            options={{ headerShown: false }}
+          />
+          <Screen
+            name="Home"
+            component={HomeScreen}
+            options={{ headerShown: false }}
+          />
+        </Navigator>
+      </NavigationContainer>
       <StatusBar style="auto" />
-    </View>
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

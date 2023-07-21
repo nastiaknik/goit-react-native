@@ -5,7 +5,7 @@ const createStyles = (dimensions) => {
     bgImage: {
       flex: 1,
       resizeMode: "cover",
-      width: dimensions.weight,
+      width: dimensions.width,
       height: dimensions.height + 142,
     },
     scrollViewContent: {
@@ -13,6 +13,7 @@ const createStyles = (dimensions) => {
       justifyContent: "flex-end",
       alignItems: "center",
       width: dimensions.width,
+      height: dimensions.height,
     },
     form: {
       alignItems: "center",
@@ -20,40 +21,21 @@ const createStyles = (dimensions) => {
       paddingHorizontal: 16,
       borderTopLeftRadius: 25,
       borderTopRightRadius: 25,
-      paddingBottom: 45,
       position: "relative",
     },
-    avatar: {
-      position: "absolute",
-      top: -60,
-      left: "auto",
-      width: 120,
-      height: 120,
-      zIndex: 1,
-      borderRadius: 16,
-      backgroundColor: "#F6F6F6",
-    },
-    icon: {
-      position: "absolute",
-      right: -13,
-      bottom: 14,
-      paddding: 15,
-      width: 25,
-      height: 25,
-    },
     title: {
-      marginTop: 92,
+      marginTop: 32,
       marginBottom: 32,
       fontFamily: "Roboto-Medium",
       fontSize: 30,
       fontWeight: 500,
-      lineHeight: 35,
       letterSpacing: 0.01,
+      lineHeight: 35,
       color: "#212121",
     },
     input: {
       width: "100%",
-      height: 50,
+      minHeight: 50,
       marginBottom: 16,
       paddingHorizontal: 16,
       paddingTop: 16,
@@ -61,13 +43,16 @@ const createStyles = (dimensions) => {
       fontFamily: "Roboto-Regular",
       fontSize: 16,
       lineHeight: 19,
+      color: "#212121",
       borderWidth: 1,
       borderRadius: 8,
       borderColor: "#E8E8E8",
       backgroundColor: "#F6F6F6",
-      color: "#212121",
     },
-    inputFocused: { borderColor: "#FF6C00", backgroundColor: "#ffffff" },
+    inputFocused: {
+      borderColor: "#FF6C00",
+      backgroundColor: "#ffffff",
+    },
     inputContainer: {
       position: "relative",
       width: "100%",
@@ -95,6 +80,9 @@ const createStyles = (dimensions) => {
       backgroundColor: "#FF6C00",
       borderWidth: 1,
       borderColor: "transparent",
+      borderRadius: 100,
+      justifyContent: "center",
+      alignItems: "center",
     },
     btnText: {
       textAlign: "center",
@@ -103,7 +91,7 @@ const createStyles = (dimensions) => {
       lineHeight: 19,
       color: "#ffffff",
     },
-    loginText: {
+    registerText: {
       color: "#1B4371",
       padding: 16,
       lineHeight: 19,
@@ -111,6 +99,7 @@ const createStyles = (dimensions) => {
     },
     underlinedText: {
       textDecorationLine: "underline",
+      padding: 16,
     },
   });
 };
