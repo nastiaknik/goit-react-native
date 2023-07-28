@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 const { format } = require("date-fns");
 import {
   View,
@@ -9,6 +9,7 @@ import {
   Keyboard,
   FlatList,
   KeyboardAvoidingView,
+  Dimensions,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import styles from "./CommentsScreenStyles";
@@ -42,6 +43,17 @@ const CommentsScreen = ({ route }) => {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const { photo } = route?.params?.post;
   const username = "nugget";
+  const [screenDimensions, setScreenDimensions] = useState(
+    Dimensions.get("window")
+  );
+  const { width, height } = screenDimensions;
+
+  useEffect(() => {
+    const handleOrientationChange = ({ window }) => {
+      setScreenDimensions(window);
+    };
+    Dimensions.addEventListener("change", handleOrientationChange);
+  }, []);
 
   const onSubmitComment = () => {
     setIsShowKeyboard(false);
@@ -55,7 +67,10 @@ const CommentsScreen = ({ route }) => {
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
-      style={styles.container}
+      style={{
+        ...styles.container,
+        paddingHorizontal: height > width ? 16 : 80,
+      }}
     >
       <FlatList
         showsVerticalScrollIndicator={false}

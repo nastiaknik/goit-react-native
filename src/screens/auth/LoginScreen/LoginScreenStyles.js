@@ -17,7 +17,8 @@ const createStyles = ({ width, height }) => {
     form: {
       alignItems: "center",
       backgroundColor: "#FFFFFF",
-      borderRadius: 25,
+      borderTopLeftRadius: 25,
+      borderTopRightRadius: 25,
       paddingHorizontal: height > width ? 16 : 100,
     },
     title: {
@@ -78,7 +79,6 @@ const createStyles = ({ width, height }) => {
       backgroundColor: "#FF6C00",
       borderWidth: 1,
       borderColor: "transparent",
-      borderRadius: 100,
       justifyContent: "center",
       alignItems: "center",
     },
