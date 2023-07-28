@@ -1,18 +1,29 @@
+import { useState, useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
-import { TouchableOpacity } from "react-native";
-import { useEffect, useState } from "react";
+import { TouchableOpacity, Dimensions } from "react-native";
 
 import PostsScreen from "../PostsScreen/PostsScreen";
 import CommentsScreen from "../CommentsScreen/CommentsScreen";
 import MapScreen from "../MapScreen/MapScreen";
 
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
-import styles from "./NestedPostsScreenStyles";
+import createStyles from "./NestedPostsScreenStyles";
 
 const NestedScreen = ({ route }) => {
   const { Navigator, Screen } = createStackNavigator();
   const navigation = useNavigation();
+  const [screenDimensions, setScreenDimensions] = useState(
+    Dimensions.get("window")
+  );
+  const styles = createStyles(screenDimensions);
+
+  useEffect(() => {
+    const handleOrientationChange = ({ window }) => {
+      setScreenDimensions(window);
+    };
+    Dimensions.addEventListener("change", handleOrientationChange);
+  }, []);
 
   const handleLogout = () => {
     navigation.navigate("Login");
@@ -34,8 +45,6 @@ const NestedScreen = ({ route }) => {
           headerTitleContainerStyle: styles.headerTitle,
           headerTitleAlign: "center",
           headerTintColor: "#212121",
-          headerBackTitleVisible: false,
-          headerBackAllowFontScaling: false,
           headerRight: () => (
             <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
               <MaterialIcons
@@ -54,7 +63,7 @@ const NestedScreen = ({ route }) => {
         options={{
           headerTitleAlign: "center",
           headerTitle: "Коментарі",
-          headerBackTitleVisible: false,
+          headerStyle: styles.header,
           headerLeft: () => (
             <TouchableOpacity style={styles.goBackBtn} onPress={handleGoBack}>
               <AntDesign
@@ -64,7 +73,6 @@ const NestedScreen = ({ route }) => {
               />
             </TouchableOpacity>
           ),
-          tabBarStyle: { display: "none" },
         }}
       />
       <Screen
@@ -73,6 +81,7 @@ const NestedScreen = ({ route }) => {
         options={{
           headerTitleAlign: "center",
           headerTitle: "Карта",
+          headerStyle: styles.header,
           headerLeft: () => (
             <TouchableOpacity style={styles.goBackBtn} onPress={handleGoBack}>
               <AntDesign
@@ -82,7 +91,6 @@ const NestedScreen = ({ route }) => {
               />
             </TouchableOpacity>
           ),
-          tabBarStyle: { display: "none" },
         }}
       />
     </Navigator>

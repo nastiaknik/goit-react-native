@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import * as ImagePicker from "expo-image-picker";
-import Ionicons from "react-native-vector-icons";
 import {
   View,
   Text,
@@ -14,6 +12,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+import ImagePickerComponent from "../../../components/ImagePicker/ImagePicker";
 import { getResponsiveImage } from "../../../utils/getResponsiveImage";
 import {
   validateEmail,
@@ -66,34 +65,12 @@ const RegistrationScreen = () => {
     Keyboard.dismiss();
   };
 
-  const selectImage = async () => {
-    if (selectedImageUri) {
-      setSelectedImageUri(null);
-      return;
-    }
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") {
-      return;
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 1,
-      allowsEditing: true,
-    });
-
-    if (!result.canceled && result.assets && result.assets.length > 0) {
-      const asset = result.assets[0];
-      setSelectedImageUri(asset.uri);
-    }
-  };
-
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <ImageBackground style={styles.bgImage} source={bgImage}>
         <KeyboardAwareScrollView
           contentContainerStyle={styles.scrollViewContent}
-          showsVerticalScrollIndicator={true}
+          showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
           <View
@@ -115,21 +92,10 @@ const RegistrationScreen = () => {
                   }}
                 />
               )}
-              <TouchableOpacity style={styles.icon} onPress={selectImage}>
-                {selectedImageUri ? (
-                  <Ionicons
-                    name="close-circle-outline"
-                    size={25}
-                    color="#E8E8E8"
-                  />
-                ) : (
-                  <Ionicons
-                    name="add-circle-outline"
-                    size={25}
-                    color="#FF6C00"
-                  />
-                )}
-              </TouchableOpacity>
+              <ImagePickerComponent
+                selectedImageUri={selectedImageUri}
+                setSelectedImageUri={setSelectedImageUri}
+              />
             </View>
             <Text style={styles.title}>Реєстрація</Text>
             <TextInput

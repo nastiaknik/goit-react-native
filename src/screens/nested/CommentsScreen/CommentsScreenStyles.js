@@ -76,5 +76,8 @@ export default styles = StyleSheet.create({
     borderRadius: 10,
     padding: 16,
   },
-  commentList: { justifyContent: "space-between", marginTop: 32 },
+  commentList: {
+    justifyContent: "space-between",
+    marginTop: 32,
+  },
 });

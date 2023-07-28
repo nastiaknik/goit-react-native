@@ -1,12 +1,12 @@
 import { StyleSheet } from "react-native";
 
-const createStyles = (dimensions) => {
+const createStyles = ({ width, height }) => {
   return StyleSheet.create({
     bgImage: {
       flex: 1,
       resizeMode: "cover",
-      width: dimensions.width,
-      height: dimensions.height + 142,
+      width: width,
+      height: height + 142,
     },
     scrollViewContent: {
       justifyContent: "flex-end",
@@ -17,15 +17,15 @@ const createStyles = (dimensions) => {
     form: {
       alignItems: "center",
       backgroundColor: "#FFFFFF",
-      paddingHorizontal: 16,
-      borderTopLeftRadius: 25,
-      borderTopRightRadius: 25,
+      paddingHorizontal: height > width ? 16 : 100,
       paddingBottom: 45,
+      borderRadius: 25,
       position: "relative",
+      marginTop: height > width ? 0 : 80,
     },
     avatar: {
-      position: dimensions.height > dimensions.width ? "absolute" : "relative",
-      top: dimensions.height > dimensions.width ? -60 : 30,
+      position: "absolute",
+      top: -60,
       left: "auto",
       width: 120,
       height: 120,
@@ -41,7 +41,7 @@ const createStyles = (dimensions) => {
       height: 25,
     },
     title: {
-      marginTop: dimensions.height > dimensions.width ? 92 : 50,
+      marginTop: 92,
       marginBottom: 32,
       fontFamily: "Roboto-Medium",
       fontSize: 30,

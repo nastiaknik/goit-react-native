@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   KeyboardAvoidingView,
+  Dimensions,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome, SimpleLineIcons } from "@expo/vector-icons";
@@ -19,6 +20,18 @@ const PostsScreen = ({ route }) => {
     email: "email@example.com",
     photo: null,
   });
+  const [screenDimensions, setScreenDimensions] = useState(
+    Dimensions.get("window")
+  );
+  const { width, height } = screenDimensions;
+
+  useEffect(() => {
+    const handleOrientationChange = ({ window: { width, height } }) => {
+      setScreenDimensions({ width, height });
+    };
+
+    Dimensions.addEventListener("change", handleOrientationChange);
+  }, []);
 
   useEffect(() => {
     if (route.params) {
@@ -42,7 +55,10 @@ const PostsScreen = ({ route }) => {
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
-      style={styles.container}
+      style={{
+        ...styles.container,
+        paddingHorizontal: height > width ? 16 : 80,
+      }}
     >
       <FlatList
         showsVerticalScrollIndicator={false}

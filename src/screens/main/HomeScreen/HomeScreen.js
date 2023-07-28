@@ -70,7 +70,7 @@ const HomeScreen = ({ route }) => {
         component={CreatePostsScreen}
         options={{
           title: "Створити публікацію",
-          headerStyle: { ...styles.header },
+          headerStyle: styles.header,
           headerTitleContainerStyle: styles.headerTitle,
           headerTitleAlign: "center",
           headerTintColor: "#212121",

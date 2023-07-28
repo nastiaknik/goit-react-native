@@ -1,13 +1,13 @@
 import { StyleSheet } from "react-native";
 
-const createStyles = (dimensions) => {
+const createStyles = ({ width, height }) => {
   return StyleSheet.create({
     bgImage: {
       flex: 1,
       resizeMode: "cover",
-      width: dimensions.width,
+      width: width,
       height: "100%",
-      height: dimensions.height + 142,
+      height: height + 142,
       justifyContent: "flex-end",
     },
     container: {
@@ -15,12 +15,12 @@ const createStyles = (dimensions) => {
       justifyContent: "flex-end",
     },
     form: {
-      marginTop: 202,
+      marginTop: height > width ? 202 : 100,
       flexDirection: "column",
       backgroundColor: "#FFFFFF",
       borderTopLeftRadius: 25,
       borderTopRightRadius: 25,
-      paddingHorizontal: 16,
+      paddingHorizontal: height > width ? 16 : 80,
       paddingBottom: 43,
     },
     avatarWrapper: {
@@ -73,7 +73,7 @@ const createStyles = (dimensions) => {
       justifyContent: "flex-end",
       marginVertical: 16,
     },
-    lastPost: { paddingBottom: 202 },
+    lastPost: { paddingBottom: height > width ? 202 : 100 },
     postTitle: {
       marginTop: 8,
       fontFamily: "Roboto-Medium",
@@ -112,7 +112,11 @@ const createStyles = (dimensions) => {
       color: "#212121",
       textDecorationLine: "underline",
     },
-    logoutBtn: { position: "absolute", top: 22, right: 16 },
+    logoutBtn: {
+      position: "absolute",
+      top: 22,
+      right: height > width ? 16 : 50,
+    },
   });
 };
 

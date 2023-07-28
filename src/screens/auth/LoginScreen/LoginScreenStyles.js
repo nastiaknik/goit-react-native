@@ -1,12 +1,12 @@
 import { StyleSheet } from "react-native";
 
-const createStyles = (dimensions) => {
+const createStyles = ({ width, height }) => {
   return StyleSheet.create({
     bgImage: {
       flex: 1,
       resizeMode: "cover",
-      width: dimensions.width,
-      height: dimensions.height + 142,
+      width: width,
+      height: height + 142,
     },
     scrollViewContent: {
       justifyContent: "flex-end",
@@ -17,9 +17,8 @@ const createStyles = (dimensions) => {
     form: {
       alignItems: "center",
       backgroundColor: "#FFFFFF",
-      paddingHorizontal: 16,
-      borderTopLeftRadius: 25,
-      borderTopRightRadius: 25,
+      borderRadius: 25,
+      paddingHorizontal: height > width ? 16 : 100,
     },
     title: {
       marginTop: 32,

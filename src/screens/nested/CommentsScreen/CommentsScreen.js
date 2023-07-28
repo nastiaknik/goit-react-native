@@ -106,7 +106,7 @@ const CommentsScreen = ({ route }) => {
                     {formatDate(new Date(item.createdAt || new Date()))}
                   </Text>
                 </View>
-                <View style={styles.avatar}></View>
+                <View style={styles.avatar} />
               </View>
             );
           }

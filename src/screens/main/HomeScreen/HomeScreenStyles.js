@@ -1,12 +1,12 @@
 import { StyleSheet } from "react-native";
 
-const createStyles = (dimensions) => {
+const createStyles = ({ width, height }) => {
   return StyleSheet.create({
     container: {
       backgroundColor: "#ffffff",
     },
     header: {
-      minHeight: 88,
+      height: height > width ? 88 : 55,
       borderBottomColor: "#BDBDBD",
       borderBottomWidth: 0.5,
       boxShadow: "0px 0.5px 0px 0px #0000004D",
@@ -15,8 +15,7 @@ const createStyles = (dimensions) => {
       fontFamily: "Roboto-Medium",
       fontSize: 17,
       lineHeight: 22,
-      paddingBottom: 11,
-      marginBottom: 10,
+      marginBottom: height > width ? 10 : 0,
     },
     createPostTab: {
       display: "flex",
@@ -30,7 +29,7 @@ const createStyles = (dimensions) => {
     },
     goBackBtn: {
       marginLeft: 16,
-      marginBottom: 11,
+      marginBottom: height > width ? 11 : 0,
     },
   });
 };
