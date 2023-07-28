@@ -1,4 +1,5 @@
 import { useState } from "react";
+const { format } = require("date-fns");
 import {
   View,
   Text,
@@ -11,7 +12,6 @@ import {
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import styles from "./CommentsScreenStyles";
-const { format } = require("date-fns");
 
 function formatDate(date) {
   return format(date, "dd MMMM',' yyyy | HH:mm", {
@@ -40,7 +40,6 @@ const CommentsScreen = ({ route }) => {
     },
   ]);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-
   const { photo } = route?.params?.post;
   const username = "nugget";
 
@@ -52,8 +51,6 @@ const CommentsScreen = ({ route }) => {
     setCreatedAt(new Date());
   };
 
-  const dataList = [{ uri: photo }, ...comments];
-
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -62,7 +59,7 @@ const CommentsScreen = ({ route }) => {
     >
       <FlatList
         showsVerticalScrollIndicator={false}
-        data={dataList}
+        data={[{ uri: photo }, ...comments]}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => {
           if (index === 0) {
@@ -72,79 +69,44 @@ const CommentsScreen = ({ route }) => {
                   paddingTop: 32,
                 }}
               >
-                <Image
-                  source={{ uri: photo }}
-                  style={{
-                    height: 240,
-                    width: "100%",
-                    overflow: "hidden",
-                    borderRadius: 8,
-                  }}
-                />
+                <Image source={{ uri: photo }} style={styles.photo} />
               </View>
             );
           } else {
             return (
               <View
                 style={{
+                  ...styles.commentList,
                   flexDirection:
                     item.username !== username ? "row-reverse" : "row",
-                  justifyContent: "space-between",
-                  marginTop: 32,
                 }}
               >
                 <View
                   style={{
-                    flex: 1,
-                    backgroundColor: "rgba(0, 0, 6, 0.03)",
+                    ...styles.commentCont,
                     marginRight: item.username === username ? 20 : 0,
                     marginLeft: item.username !== username ? 20 : 0,
-                    overflow: "hidden",
-                    borderRadius: 10,
-                    padding: 16,
                   }}
                 >
                   <Text
                     style={{
-                      overflow: "hidden",
-                      fontSize: 13,
-                      lineHeight: 18,
-                      color: "#212121",
-                      fontWeight: "700",
+                      ...username,
                       textAlign: item.username !== username ? "left" : "right",
                     }}
                   >
                     {item.username}
                   </Text>
+                  <Text style={styles.commentText}>{item.comment}</Text>
                   <Text
                     style={{
-                      overflow: "hidden",
-                      fontSize: 13,
-                      lineHeight: 18,
-                      color: "#212121",
-                      marginBottom: 8,
-                    }}
-                  >
-                    {item.comment}
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 10,
-                      color: "#BDBDBD",
+                      ...styles.date,
                       textAlign: item.username !== username ? "left" : "right",
                     }}
                   >
                     {formatDate(new Date(item.createdAt || new Date()))}
                   </Text>
                 </View>
-                <View
-                  style={{
-                    width: 28,
-                    height: 28,
-                    borderRadius: 14,
-                    backgroundColor: "#E8E8E8",
-                  }}
-                ></View>
+                <View style={styles.avatar}></View>
               </View>
             );
           }
@@ -156,7 +118,7 @@ const CommentsScreen = ({ route }) => {
           style={styles.inputText}
           value={comment}
           placeholder="Коментувати..."
-          onChangeText={(text) => setComment(text)}
+          onChangeText={setComment}
           onFocus={() => setIsShowKeyboard(true)}
         />
         <TouchableOpacity style={styles.sendBtn} onPress={onSubmitComment}>

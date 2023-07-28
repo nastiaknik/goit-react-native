@@ -38,15 +38,6 @@ const PostsScreen = ({ route }) => {
     return location.length > 30 ? `${location.slice(0, 29)}...` : location;
   };
 
-  const dataList = [
-    {
-      photo: userData?.photo,
-      username: userData?.username,
-      email: userData?.email,
-    },
-    ...posts,
-  ];
-
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -55,7 +46,7 @@ const PostsScreen = ({ route }) => {
     >
       <FlatList
         showsVerticalScrollIndicator={false}
-        data={dataList}
+        data={[{ key: "user_info" }, ...posts]}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => {
           if (index === 0) {

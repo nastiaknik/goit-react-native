@@ -28,7 +28,10 @@ const createStyles = (dimensions) => {
       backgroundColor: "#FF6C00",
       color: "#FFFFFF",
     },
-    goBackBtn: { marginLeft: 16, marginBottom: 11 },
+    goBackBtn: {
+      marginLeft: 16,
+      marginBottom: 11,
+    },
   });
 };
 

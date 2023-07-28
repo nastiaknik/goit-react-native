@@ -27,26 +27,26 @@ const MapScreen = ({ route }) => {
   return (
     <View style={styles.container}>
       {latitude && longitude ? (
-        <MapView 
-        style={styles.map}
-        initialRegion={coords}
-        provider="google"
-        apiKey={GOOGLE_MAPS_API_KEY}
-       showsUserLocation={true}
-        showsMyLocationButton={true}
-        showsScale={true}
-        showsIndoorLevelPicker={true}
-        zoomControlEnabled={true}
-        minZoomLevel={0}
-        maxZoomLevel={20}
-        moveOnMarkerPress={true}
-        rotateEnabled={true}
-        scrollEnabled={true}
-        pitchEnabled={true}
-        toolbarEnabled={true}
-      >
-        <Marker coordinate={coords} />
-      </MapView>
+        <MapView
+          style={styles.map}
+          initialRegion={coords}
+          provider="google"
+          apiKey={GOOGLE_MAPS_API_KEY}
+          showsUserLocation={true}
+          showsMyLocationButton={true}
+          showsScale={true}
+          showsIndoorLevelPicker={true}
+          zoomControlEnabled={true}
+          minZoomLevel={0}
+          maxZoomLevel={20}
+          moveOnMarkerPress={true}
+          rotateEnabled={true}
+          scrollEnabled={true}
+          pitchEnabled={true}
+          toolbarEnabled={true}
+        >
+          <Marker coordinate={coords} />
+        </MapView>
       ) : (
         <View style={styles.messageContainer}>
           <Text style={styles.messageText}>Location Data Not Available</Text>

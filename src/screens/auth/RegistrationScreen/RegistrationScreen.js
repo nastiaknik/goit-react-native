@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import AddIcon from "react-native-vector-icons/Ionicons";
-import CancelIcon from "react-native-vector-icons/Ionicons";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import * as ImagePicker from "expo-image-picker";
+import Ionicons from "react-native-vector-icons";
 import {
   View,
   Text,
@@ -13,14 +13,18 @@ import {
   Dimensions,
   TouchableWithoutFeedback,
   Keyboard,
-  Alert,
 } from "react-native";
 import { getResponsiveImage } from "../../../utils/getResponsiveImage";
+import {
+  validateEmail,
+  validateLogin,
+  validatePassword,
+} from "../../../utils/validation";
 import createStyles from "./RegistrationScreenStyles";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const RegistrationScreen = () => {
   const navigation = useNavigation();
+  const bgImage = getResponsiveImage();
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -43,9 +47,12 @@ const RegistrationScreen = () => {
   }, []);
 
   const handleSubmit = () => {
-    if (validateLogin() && validateEmail() && validatePassword()) {
+    if (
+      validateLogin(login) &&
+      validateEmail(email) &&
+      validatePassword(password)
+    ) {
       keyboardHide();
-      console.log(`login: ${login}, email: ${email}, password: ${password} `);
       setLogin("");
       setEmail("");
       setPassword("");
@@ -81,41 +88,6 @@ const RegistrationScreen = () => {
     }
   };
 
-  const validateLogin = () => {
-    if (!login.trim()) {
-      Alert.alert("Error", "Please enter your login.");
-      return false;
-    }
-    return true;
-  };
-
-  const validateEmail = () => {
-    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    if (!email.trim()) {
-      Alert.alert("Error", "Please enter your email.");
-      return false;
-    }
-    if (!emailRegex.test(email.trim())) {
-      Alert.alert("Error", "Please enter a valid email address.");
-      return false;
-    }
-    return true;
-  };
-
-  const validatePassword = () => {
-    if (!password.trim()) {
-      Alert.alert("Error", "Please enter your password.");
-      return false;
-    }
-    if (password.trim().length < 6) {
-      Alert.alert("Error", "Password should be at least 6 characters long.");
-      return false;
-    }
-    return true;
-  };
-
-  const bgImage = getResponsiveImage();
-
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <ImageBackground style={styles.bgImage} source={bgImage}>
@@ -145,13 +117,13 @@ const RegistrationScreen = () => {
               )}
               <TouchableOpacity style={styles.icon} onPress={selectImage}>
                 {selectedImageUri ? (
-                  <CancelIcon
+                  <Ionicons
                     name="close-circle-outline"
                     size={25}
                     color="#E8E8E8"
                   />
                 ) : (
-                  <AddIcon
+                  <Ionicons
                     name="add-circle-outline"
                     size={25}
                     color="#FF6C00"

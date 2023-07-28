@@ -1,14 +1,16 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { TouchableOpacity, View, Dimensions } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { useState, useEffect } from "react";
+import { TouchableOpacity, View, Dimensions } from "react-native";
+import {
+  useNavigation,
+  getFocusedRouteNameFromRoute,
+} from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { AntDesign, SimpleLineIcons, Feather } from "@expo/vector-icons";
 
 import CreatePostsScreen from "../CreatePostsScreen/CreatePostsScreen";
 import ProfileScreen from "../ProfileScreen/ProfileScreen";
 import NestedPostsScreen from "../../nested/NestedPostsScreen/NestedPostsScreen";
 
-import { AntDesign, SimpleLineIcons, Feather } from "@expo/vector-icons";
 import createStyles from "./HomeScreenStyles";
 
 const HomeScreen = ({ route }) => {

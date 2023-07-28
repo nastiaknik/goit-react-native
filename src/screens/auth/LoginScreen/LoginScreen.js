@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import {
   View,
   Text,
@@ -9,15 +10,14 @@ import {
   Dimensions,
   TouchableWithoutFeedback,
   Keyboard,
-  Alert,
 } from "react-native";
 import { getResponsiveImage } from "../../../utils/getResponsiveImage";
+import { validateEmail, validatePassword } from "../../../utils/validation";
 import createStyles from "./LoginScreenStyles";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const LoginScreen = () => {
   const navigation = useNavigation();
-
+  const bgImage = getResponsiveImage();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
@@ -27,10 +27,8 @@ const LoginScreen = () => {
   const [screenDimensions, setScreenDimensions] = useState(
     Dimensions.get("window")
   );
-
-  const styles = createStyles(screenDimensions);
   const { width, height } = screenDimensions;
-  const bgImage = getResponsiveImage();
+  const styles = createStyles(screenDimensions);
 
   useEffect(() => {
     const handleOrientationChange = ({ window }) => {
@@ -65,38 +63,12 @@ const LoginScreen = () => {
   };
 
   const handleSubmit = () => {
-    if (validateEmail() && validatePassword()) {
+    if (validateEmail(email) && validatePassword(password)) {
       keyboardHide();
-      console.log(`Email: ${email}, password: ${password} `);
       setEmail("");
       setPassword("");
       navigation.navigate("Home", { userData: { email } });
     }
-  };
-
-  const validateEmail = () => {
-    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    if (!email.trim()) {
-      Alert.alert("Error", "Please enter your email.");
-      return false;
-    }
-    if (!emailRegex.test(email.trim())) {
-      Alert.alert("Error", "Please enter a valid email address.");
-      return false;
-    }
-    return true;
-  };
-
-  const validatePassword = () => {
-    if (!password.trim()) {
-      Alert.alert("Error", "Please enter your password.");
-      return false;
-    }
-    if (password.trim().length < 6) {
-      Alert.alert("Error", "Password should be at least 6 characters long.");
-      return false;
-    }
-    return true;
   };
 
   return (

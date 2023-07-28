@@ -22,12 +22,13 @@ import createStyles from "./ProfileScreenStyles";
 
 const ProfileScreen = ({ route }) => {
   const navigation = useNavigation();
+  const bgImage = getResponsiveImage();
   const [posts, setPosts] = useState([]);
   const [selectedImageUri, setSelectedImageUri] = useState(null);
+  const [username, setUsername] = useState("Username");
   const [screenDimensions, setScreenDimensions] = useState(
     Dimensions.get("window")
   );
-  const [username, setUsername] = useState("Username");
   const styles = createStyles(screenDimensions);
 
   useEffect(() => {
@@ -74,13 +75,11 @@ const ProfileScreen = ({ route }) => {
     return location.length > 31 ? `${location.slice(0, 30)}...` : location;
   };
 
-  const bgImage = getResponsiveImage();
-
   return (
     <ImageBackground style={styles.bgImage} source={bgImage}>
       <View style={styles.container}>
         <FlatList
-          //showsVerticalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.form}
           data={[{ key: "user_info" }, ...posts]}
           keyExtractor={(item, index) => index.toString()}
@@ -93,12 +92,7 @@ const ProfileScreen = ({ route }) => {
                       {selectedImageUri && (
                         <Image
                           source={{ uri: selectedImageUri }}
-                          style={{
-                            width: 120,
-                            height: 120,
-                            borderRadius: 16,
-                            overflow: "hidden",
-                          }}
+                          style={styles.image}
                         />
                       )}
                       <TouchableOpacity
@@ -121,7 +115,7 @@ const ProfileScreen = ({ route }) => {
                       </TouchableOpacity>
                     </View>
                     <TouchableOpacity
-                      style={{ position: "absolute", top: 22, right: 16 }}
+                      style={styles.logoutBtn}
                       onPress={handleLogout}
                     >
                       <MaterialIcons
@@ -142,10 +136,7 @@ const ProfileScreen = ({ route }) => {
                     index === posts.length ? styles.lastPost : styles.post,
                   ]}
                 >
-                  <Image
-                    style={{ width: "100%", height: 240, borderRadius: 8 }}
-                    source={{ uri: item?.photo }}
-                  />
+                  <Image style={styles.photo} source={{ uri: item?.photo }} />
                   <Text style={styles.postTitle}>{item?.title}</Text>
                   <View style={styles.infoWrapper}>
                     <View style={styles.interactions}>

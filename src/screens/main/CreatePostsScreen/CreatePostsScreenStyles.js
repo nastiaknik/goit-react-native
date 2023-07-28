@@ -30,8 +30,8 @@ export default styles = StyleSheet.create({
     justifyContent: "center",
     width: 60,
     height: 60,
-    backgroundColor: "#ffffff",
     borderRadius: 30,
+    backgroundColor: "#FFFFFF4D",
   },
   cameraText: {
     marginTop: 8,
@@ -74,6 +74,8 @@ export default styles = StyleSheet.create({
     borderRadius: 100,
     backgroundColor: "#FF6C00",
     marginBottom: 10,
+    position: "relative",
+    zIndex: 1,
   },
   publishText: {
     alignSelf: "center",
@@ -119,5 +121,14 @@ export default styles = StyleSheet.create({
     padding: 8,
     bottom: 12,
     left: 12,
+  },
+  list: {
+    position: "absolute",
+    width: "100%",
+    elevation: 1,
+    top: 50,
+    left: 0,
+    right: 0,
+    paddingRight: 10,
   },
 });

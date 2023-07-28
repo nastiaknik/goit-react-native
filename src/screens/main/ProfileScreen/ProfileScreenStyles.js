@@ -39,6 +39,8 @@ const createStyles = (dimensions) => {
       borderRadius: 16,
       backgroundColor: "#F6F6F6",
     },
+    image: { width: 120, height: 120, borderRadius: 16, overflow: "hidden" },
+    photo: { width: "100%", height: 240, borderRadius: 8 },
     icon: {
       position: "absolute",
       right: -13,
@@ -110,6 +112,7 @@ const createStyles = (dimensions) => {
       color: "#212121",
       textDecorationLine: "underline",
     },
+    logoutBtn: { position: "absolute", top: 22, right: 16 },
   });
 };
 

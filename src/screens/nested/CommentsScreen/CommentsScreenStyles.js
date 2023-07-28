@@ -39,4 +39,42 @@ export default styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  photo: {
+    height: 240,
+    width: "100%",
+    overflow: "hidden",
+    borderRadius: 8,
+  },
+  date: {
+    fontSize: 10,
+    color: "#BDBDBD",
+  },
+  avatar: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: "#E8E8E8",
+  },
+  commentText: {
+    overflow: "hidden",
+    fontSize: 13,
+    lineHeight: 18,
+    color: "#212121",
+    marginBottom: 8,
+  },
+  username: {
+    overflow: "hidden",
+    fontSize: 13,
+    lineHeight: 18,
+    color: "#212121",
+    fontWeight: "700",
+  },
+  commentCont: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 6, 0.03)",
+    overflow: "hidden",
+    borderRadius: 10,
+    padding: 16,
+  },
+  commentList: { justifyContent: "space-between", marginTop: 32 },
 });

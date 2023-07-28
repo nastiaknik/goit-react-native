@@ -1,4 +1,11 @@
 import { useState, useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { Camera, CameraType } from "expo-camera";
+import * as Location from "expo-location";
+import * as ImagePicker from "expo-image-picker";
+import axios from "axios";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import {
   View,
   TextInput,
@@ -9,19 +16,15 @@ import {
   Alert,
   Linking,
 } from "react-native";
-import { SimpleLineIcons } from "@expo/vector-icons";
-import { Feather } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import { Camera, CameraType } from "expo-camera";
-import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import styles from "./CreatePostsScreenStyles";
-import * as Location from "expo-location";
-import axios from "axios";
+import {
+  Feather,
+  SimpleLineIcons,
+  MaterialCommunityIcons,
+  MaterialIcons,
+} from "@expo/vector-icons";
 import Constants from "expo-constants";
 const { GOOGLE_MAPS_API_KEY } = Constants.manifest.extra;
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import * as ImagePicker from "expo-image-picker";
+import styles from "./CreatePostsScreenStyles";
 
 const CreatePostsScreen = () => {
   const [photo, setPhoto] = useState(null);
@@ -227,9 +230,7 @@ const CreatePostsScreen = () => {
   const handlePublish = () => {
     Keyboard.dismiss();
     handleClear();
-    navigation.navigate("Posts", {
-      post,
-    });
+    navigation.navigate("Posts", { post });
   };
 
   const handleClear = () => {
@@ -254,16 +255,8 @@ const CreatePostsScreen = () => {
       <View>
         <View style={styles.cameraWrapper}>
           {photo ? (
-            <ImageBackground
-              style={styles.camera}
-              source={{
-                uri: `${photo}`,
-              }}
-            >
-              <TouchableOpacity
-                style={{ ...styles.cameraBtn, backgroundColor: "#FFFFFF4D" }}
-                onPress={removePhoto}
-              >
+            <ImageBackground style={styles.camera} source={{ uri: photo }}>
+              <TouchableOpacity style={styles.cameraBtn} onPress={removePhoto}>
                 <MaterialCommunityIcons
                   name="camera-off"
                   size={24}
@@ -311,16 +304,12 @@ const CreatePostsScreen = () => {
 
         <View style={styles.locationWrapper}>
           <SimpleLineIcons name="location-pin" size={18} color="#E8E8E8" />
-
           <GooglePlacesAutocomplete
             placeholder="Місцевість..."
             placeholderTextColor="#BDBDBD"
             textInputProps={{
               value: locationDescription,
-              onChangeText: (text) => {
-                setLocationDescription(text);
-                setLocationDescription(text);
-              },
+              onChangeText: (text) => setLocationDescription(text),
             }}
             onPress={(data, details = null) => {
               setLocationDescription(data.description);
@@ -341,15 +330,7 @@ const CreatePostsScreen = () => {
             }
             styles={{
               textInput: styles.location,
-              listView: {
-                position: "absolute",
-                width: "100%",
-                elevation: 1,
-                top: 50,
-                left: 0,
-                right: 0,
-                paddingRight: 10,
-              },
+              listView: styles.list,
               row: {
                 padding: 10,
                 height: 44,
@@ -364,8 +345,6 @@ const CreatePostsScreen = () => {
         <TouchableOpacity
           style={{
             ...styles.publishBtn,
-            position: "relative",
-            zIndex: 1,
             backgroundColor: photo && title ? "#FF6C00" : "#F6F6F6",
           }}
           activeOpacity={0.7}
