@@ -37,7 +37,6 @@
         <string>UIInterfaceOrientationLandscapeRight</string>
     </array>
 
-    <!-- Add the following keys for permissions -->
     <key>NSCameraUsageDescription</key>
     <string>Allow access to the camera to capture photos.</string>
     <key>NSPhotoLibraryUsageDescription</key>

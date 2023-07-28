@@ -1,0 +1,61 @@
+import { StyleSheet } from "react-native";
+
+export default styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#ffffff",
+    paddingTop: 32,
+    justifyContent: "space-between",
+    overflow: "hidden",
+  },
+  title: {
+    borderBottomWidth: 1,
+    borderBottomColor: "#E8E8E8",
+    width: "100%",
+    paddingVertical: 16,
+    marginBottom: 16,
+  },
+  publishBtn: {
+    width: "100%",
+    paddingVertical: 16,
+    paddingHorizontal: 32,
+    borderRadius: 100,
+    backgroundColor: "#FF6C00",
+    marginBottom: 10,
+    position: "relative",
+    zIndex: 1,
+  },
+  publishText: {
+    alignSelf: "center",
+    fontSize: 16,
+    lineHeight: 19,
+  },
+  deleteBtn: {
+    backgroundColor: "#F6F6F6",
+    width: 70,
+    height: 40,
+    borderRadius: 20,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    marginHorizontal: "auto",
+    marginTop: "auto",
+  },
+  btn: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    paddingBottom: 34,
+    paddingTop: 5,
+    position: "relative",
+    zIndex: -1,
+  },
+  list: {
+    position: "absolute",
+    width: "100%",
+    elevation: 1,
+    top: 50,
+    left: 0,
+    right: 0,
+    paddingRight: 10,
+  },
+});

@@ -1,0 +1,122 @@
+import { StyleSheet } from "react-native";
+
+const createStyles = ({ width, height }) => {
+  return StyleSheet.create({
+    bgImage: {
+      flex: 1,
+      resizeMode: "cover",
+      width: width,
+      height: height + 142,
+    },
+    scrollViewContent: {
+      justifyContent: "flex-end",
+      alignItems: "center",
+      minWidth: "100%",
+      minHeight: "100%",
+    },
+    form: {
+      alignItems: "center",
+      backgroundColor: "#FFFFFF",
+      paddingHorizontal: height > width ? 16 : 100,
+      paddingBottom: 45,
+      borderTopLeftRadius: 25,
+      borderTopRightRadius: 25,
+      position: "relative",
+      marginTop: height > width ? 0 : 80,
+    },
+    avatar: {
+      position: "absolute",
+      top: -60,
+      left: "auto",
+      width: 120,
+      height: 120,
+      zIndex: 1,
+      borderRadius: 16,
+      backgroundColor: "#F6F6F6",
+    },
+    icon: {
+      position: "absolute",
+      right: -13,
+      bottom: 14,
+      width: 25,
+      height: 25,
+    },
+    title: {
+      marginTop: 92,
+      marginBottom: 32,
+      fontFamily: "Roboto-Medium",
+      fontSize: 30,
+      fontWeight: 500,
+      lineHeight: 35,
+      letterSpacing: 0.01,
+      color: "#212121",
+    },
+    input: {
+      width: "100%",
+      minHeight: 50,
+      marginBottom: 16,
+      paddingHorizontal: 16,
+      paddingTop: 16,
+      paddingBottom: 15,
+      fontFamily: "Roboto-Regular",
+      fontSize: 16,
+      lineHeight: 19,
+      borderWidth: 1,
+      borderRadius: 8,
+      borderColor: "#E8E8E8",
+      backgroundColor: "#F6F6F6",
+      color: "#212121",
+      textTransform: "lowercase",
+    },
+    inputFocused: {
+      borderColor: "#FF6C00",
+      backgroundColor: "#ffffff",
+    },
+    inputContainer: {
+      position: "relative",
+      width: "100%",
+    },
+    showPassword: {
+      color: "#1B4371",
+      fontFamily: "Roboto-Regular",
+      fontSize: 16,
+      lineHeight: 19,
+    },
+    showPasswordBtn: {
+      position: "absolute",
+      bottom: 16,
+      right: 16,
+      paddingTop: 16,
+      paddingBottom: 15,
+    },
+    btn: {
+      marginTop: 27,
+      width: "100%",
+      borderRadius: 100,
+      marginBottom: 16,
+      paddingHorizontal: 16,
+      paddingVertical: 16,
+      backgroundColor: "#FF6C00",
+      borderWidth: 1,
+      borderColor: "transparent",
+    },
+    btnText: {
+      textAlign: "center",
+      fontFamily: "Roboto-Regular",
+      fontSize: 16,
+      lineHeight: 19,
+      color: "#ffffff",
+    },
+    loginText: {
+      color: "#1B4371",
+      padding: 16,
+      lineHeight: 19,
+      fontFamily: "Roboto-Regular",
+    },
+    underlinedText: {
+      textDecorationLine: "underline",
+    },
+  });
+};
+
+export default createStyles;
