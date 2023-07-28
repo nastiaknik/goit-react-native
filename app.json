@@ -3,11 +3,12 @@
     "name": "goit-react-native",
     "slug": "goit-react-native",
     "version": "1.0.0",
+    "platforms": ["ios", "android"],
     "orientation": "default",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/icons/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/icons/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,21 +18,35 @@
       "infoPlist": {
         "NSCameraUsageDescription": "Allow access to the camera to capture photos.",
         "NSPhotoLibraryUsageDescription": "Allow access to the photo library to select photos."
+      },
+      "bundleIdentifier": "com.nastiaknik.goitreactnative",
+      "config": {
+        "googleMapsApiKey": "AIzaSyD5eURnvWN2nIvYoDF4Eu6_SB141bh8yI0"
       }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/icons/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "permissions": [
         "CAMERA",
         "READ_EXTERNAL_STORAGE",
         "WRITE_EXTERNAL_STORAGE"
-      ]
+      ],
+      "package": "com.nastiaknik.goitreactnative",
+      "config": {
+        "googleMaps": { "apiKey": "AIzaSyBkH9JYRvuw0AVLtQCxGcCEnFMjvi_pliM" }
+      }
     },
     "web": {
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/icons/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "054bae04-677e-44a0-8981-bae1bb0bb68b"
+      },
+      "GOOGLE_MAPS_API_KEY": "AIzaSyC5sv-g1FeEy6fal2LrtCBATB3shJok6VA"
     }
   }
 }
