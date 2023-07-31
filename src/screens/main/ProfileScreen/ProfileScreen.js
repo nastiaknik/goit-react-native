@@ -9,6 +9,8 @@ import {
   Text,
   FlatList,
 } from "react-native";
+import { useDispatch } from "react-redux";
+import { logout } from "./../../../redux/auth/operations";
 import {
   FontAwesome,
   AntDesign,
@@ -19,7 +21,8 @@ import { getResponsiveImage } from "../../../utils/getResponsiveImage";
 import createStyles from "./ProfileScreenStyles";
 import ImagePickerComponent from "../../../components/ImagePicker/ImagePicker";
 
-const ProfileScreen = ({ route }) => {
+const ProfileScreen = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const bgImage = getResponsiveImage();
   const [posts, setPosts] = useState([]);
@@ -31,13 +34,6 @@ const ProfileScreen = ({ route }) => {
   const styles = createStyles(screenDimensions);
 
   useEffect(() => {
-    const { post, userData } = route.params;
-    post && setPosts((prevState) => [...prevState, post]);
-    userData?.login && setUsername(userData.login);
-    userData?.photo && setSelectedImageUri(userData.photo);
-  }, [route.params]);
-
-  useEffect(() => {
     const handleOrientationChange = ({ window: { width, height } }) => {
       setScreenDimensions({ width, height });
     };
@@ -46,7 +42,7 @@ const ProfileScreen = ({ route }) => {
   }, []);
 
   const handleLogout = () => {
-    navigation.navigate("Login");
+    dispatch(logout());
   };
 
   const handleLocationDescr = (location) => {

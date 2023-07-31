@@ -11,11 +11,14 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+import { useDispatch } from "react-redux";
+import { login } from "./../../../redux/auth/operations";
 import { getResponsiveImage } from "../../../utils/getResponsiveImage";
 import { validateEmail, validatePassword } from "../../../utils/validation";
 import createStyles from "./LoginScreenStyles";
 
 const LoginScreen = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const bgImage = getResponsiveImage();
   const [email, setEmail] = useState("");
@@ -64,10 +67,10 @@ const LoginScreen = () => {
 
   const handleSubmit = () => {
     if (validateEmail(email) && validatePassword(password)) {
+      dispatch(login({ email, password }));
       keyboardHide();
       setEmail("");
       setPassword("");
-      navigation.navigate("Home", { userData: { email } });
     }
   };
 

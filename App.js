@@ -2,16 +2,13 @@ import { useCallback } from "react";
 import { StatusBar } from "expo-status-bar";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
 import "react-native-gesture-handler";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { store, persistor } from "./src/redux/store";
 
-import Authorization from "./src/screens/auth/Auth";
-import HomeScreen from "./src/screens/main/HomeScreen/HomeScreen";
-
+import MainNavigation from "./src/screens/MainNavigation";
 export default function App() {
-  const { Screen, Navigator } = createStackNavigator();
-
   SplashScreen.preventAutoHideAsync();
 
   const [fontsLoaded] = useFonts({
@@ -33,22 +30,11 @@ export default function App() {
   }
 
   return (
-    <>
-      <NavigationContainer>
-        <Navigator>
-          <Screen
-            name="Authorization"
-            component={Authorization}
-            options={{ headerShown: false }}
-          />
-          <Screen
-            name="Home"
-            component={HomeScreen}
-            options={{ headerShown: false }}
-          />
-        </Navigator>
-      </NavigationContainer>
-      <StatusBar style="auto" />
-    </>
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <MainNavigation />
+        <StatusBar style="auto" />
+      </PersistGate>
+    </Provider>
   );
 }

@@ -33,20 +33,6 @@ const PostsScreen = ({ route }) => {
     Dimensions.addEventListener("change", handleOrientationChange);
   }, []);
 
-  useEffect(() => {
-    if (route.params) {
-      const { post, userData } = route.params;
-      post && setPosts((prevState) => [...prevState, post]);
-      userData &&
-        setUserData((prevState) => ({
-          ...prevState,
-          username: userData.login ?? prevState.username,
-          email: userData.email ?? prevState.email,
-          photo: userData.photo ?? prevState.photo,
-        }));
-    }
-  }, [route?.params]);
-
   const handleLocationDescr = (location) => {
     return location.length > 30 ? `${location.slice(0, 29)}...` : location;
   };

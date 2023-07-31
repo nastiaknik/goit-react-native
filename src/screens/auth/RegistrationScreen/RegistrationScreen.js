@@ -12,6 +12,8 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+import { useDispatch } from "react-redux";
+import { register } from "./../../../redux/auth/operations";
 import ImagePickerComponent from "../../../components/ImagePicker/ImagePicker";
 import { getResponsiveImage } from "../../../utils/getResponsiveImage";
 import {
@@ -22,6 +24,7 @@ import {
 import createStyles from "./RegistrationScreenStyles";
 
 const RegistrationScreen = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const bgImage = getResponsiveImage();
   const [login, setLogin] = useState("");
@@ -51,13 +54,12 @@ const RegistrationScreen = () => {
       validateEmail(email) &&
       validatePassword(password)
     ) {
+      dispatch(register({ email, password, login, photo: selectedImageUri }));
       keyboardHide();
       setLogin("");
       setEmail("");
       setPassword("");
-      navigation.navigate("Home", {
-        userData: { login, email, photo: selectedImageUri },
-      });
+      setSelectedImageUri(null);
     }
   };
 
