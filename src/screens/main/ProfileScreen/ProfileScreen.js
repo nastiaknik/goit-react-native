@@ -11,6 +11,9 @@ import {
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { logout } from "./../../../redux/auth/operations";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../../redux/auth/selectors";
+import { getCollection } from "../../../firebase/firebaseAPI";
 import {
   FontAwesome,
   AntDesign,
@@ -25,13 +28,19 @@ const ProfileScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const bgImage = getResponsiveImage();
+  const { username, photo, userId } = useSelector(selectUser);
   const [posts, setPosts] = useState([]);
-  const [selectedImageUri, setSelectedImageUri] = useState(null);
-  const [username, setUsername] = useState("Username");
+  const [selectedImageUri, setSelectedImageUri] = useState(photo);
   const [screenDimensions, setScreenDimensions] = useState(
     Dimensions.get("window")
   );
   const styles = createStyles(screenDimensions);
+
+  useEffect(() => {
+    (async () => {
+      await getCollection("posts", userId, setPosts);
+    })();
+  }, []);
 
   useEffect(() => {
     const handleOrientationChange = ({ window: { width, height } }) => {
@@ -85,7 +94,7 @@ const ProfileScreen = () => {
                       />
                     </TouchableOpacity>
                   </View>
-                  <Text style={styles.username}>{username}</Text>
+                  <Text style={styles.username}>{username || "Username"}</Text>
                 </>
               );
             } else {

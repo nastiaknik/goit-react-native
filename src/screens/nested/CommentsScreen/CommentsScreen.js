@@ -1,5 +1,12 @@
 import { useState, useEffect } from "react";
 const { format } = require("date-fns");
+import { useSelector } from "react-redux";
+import { selectUser } from "../../../redux/auth/selectors";
+import {
+  uploadDoc,
+  getAllCollections,
+} from "../../../firebase/firebaseAPI";
+
 import {
   View,
   Text,
@@ -15,38 +22,29 @@ import { AntDesign } from "@expo/vector-icons";
 import styles from "./CommentsScreenStyles";
 
 function formatDate(date) {
-  return format(date, "dd MMMM',' yyyy | HH:mm", {
+  const parsedDate = new Date(date);
+  return format(parsedDate,   
+"dd MMMM',' yyyy | HH:mm", {
     locale: require("date-fns/locale/uk"),
   });
 }
 
 const CommentsScreen = ({ route }) => {
-  const [comment, setComment] = useState("");
-  const [createdAt, setCreatedAt] = useState(new Date());
-  const [comments, setComments] = useState([
-    {
-      username: "duckness",
-      comment: "nice",
-      createdAt: new Date("2023-07-25T12:34:56"),
-    },
-    {
-      username: "nugget",
-      comment: "<3",
-      createdAt: new Date("2023-07-25T15:12:34"),
-    },
-    {
-      username: "qwerty",
-      comment: "😍",
-      createdAt: new Date(),
-    },
-  ]);
+  const { userId, photo, username } = useSelector(selectUser);
+  const { post } = route?.params;
+  const [message, setMessage] = useState("");
+  const [comments, setComments] = useState([]);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-  const { photo } = route?.params?.post;
-  const username = "nugget";
   const [screenDimensions, setScreenDimensions] = useState(
     Dimensions.get("window")
   );
   const { width, height } = screenDimensions;
+
+  useEffect(() => {
+    (async () => {
+      await getAllCollections(`posts/${post.id}/comments`, setComments);
+    })();
+  }, []);
 
   useEffect(() => {
     const handleOrientationChange = ({ window }) => {
@@ -55,18 +53,27 @@ const CommentsScreen = ({ route }) => {
     Dimensions.addEventListener("change", handleOrientationChange);
   }, []);
 
-  const onSubmitComment = () => {
+  const onSubmitComment = async () => {
+    const newComment = {
+      userId,
+      avatar: photo,
+      username: username || "Username",
+      message,
+      createdAt: new Date().toISOString(),
+    };
+      const updatedComments = [...comments, newComment];
+  updatedComments.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+  setComments(updatedComments);
+    setMessage("");
     setIsShowKeyboard(false);
     Keyboard.dismiss();
-    setComments([...comments, { username, comment, createdAt }]);
-    setComment("");
-    setCreatedAt(new Date());
+    await uploadDoc(`posts/${post.id}/comments`, newComment);
   };
 
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 77 : 0}
       style={{
         ...styles.container,
         paddingHorizontal: height > width ? 16 : 80,
@@ -74,7 +81,7 @@ const CommentsScreen = ({ route }) => {
     >
       <FlatList
         showsVerticalScrollIndicator={false}
-        data={[{ uri: photo }, ...comments]}
+        data={[{ uri: post.photo }, ...comments]}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => {
           if (index === 0) {
@@ -84,7 +91,7 @@ const CommentsScreen = ({ route }) => {
                   paddingTop: 32,
                 }}
               >
-                <Image source={{ uri: photo }} style={styles.photo} />
+                <Image source={{ uri: post.photo }} style={styles.photo} />
               </View>
             );
           } else {
@@ -92,36 +99,37 @@ const CommentsScreen = ({ route }) => {
               <View
                 style={{
                   ...styles.commentList,
-                  flexDirection:
-                    item.username !== username ? "row-reverse" : "row",
+                  flexDirection: item.userId !== userId ? "row-reverse" : "row",
                 }}
               >
                 <View
                   style={{
                     ...styles.commentCont,
-                    marginRight: item.username === username ? 20 : 0,
-                    marginLeft: item.username !== username ? 20 : 0,
+                    marginRight: item.userId === userId ? 20 : 0,
+                    marginLeft: item.userId !== userId ? 20 : 0,
                   }}
                 >
                   <Text
                     style={{
-                      ...username,
-                      textAlign: item.username !== username ? "left" : "right",
+                      ...styles.username,
+                      textAlign: item.userId !== userId ? "left" : "right",
                     }}
                   >
                     {item.username}
                   </Text>
-                  <Text style={styles.commentText}>{item.comment}</Text>
+                  <Text style={styles.commentText}>{item.message}</Text>
                   <Text
                     style={{
                       ...styles.date,
-                      textAlign: item.username !== username ? "left" : "right",
+                      textAlign: item.userId !== userId ? "left" : "right",
                     }}
                   >
                     {formatDate(new Date(item.createdAt || new Date()))}
                   </Text>
                 </View>
-                <View style={styles.avatar} />
+                <View style={styles.avatar}>
+                  <Image source={{ uri: item.avatar }} style={styles.avatar} />
+                </View>
               </View>
             );
           }
@@ -131,9 +139,9 @@ const CommentsScreen = ({ route }) => {
       <View style={styles.input}>
         <TextInput
           style={styles.inputText}
-          value={comment}
+          value={message}
           placeholder="Коментувати..."
-          onChangeText={setComment}
+          onChangeText={setMessage}
           onFocus={() => setIsShowKeyboard(true)}
         />
         <TouchableOpacity style={styles.sendBtn} onPress={onSubmitComment}>

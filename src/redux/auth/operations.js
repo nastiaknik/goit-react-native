@@ -6,7 +6,8 @@ import {
   updateProfile,
   signOut,
 } from "firebase/auth";
-import { auth } from "../../firebase/config";
+import { db, auth } from "../../firebase/config";
+import { doc, setDoc } from "firebase/firestore";
 import { Alert } from "react-native";
 
 export const register = createAsyncThunk(
@@ -19,17 +20,22 @@ export const register = createAsyncThunk(
         password
       );
       await updateProfile(user, {
-        username: login,
+        displayName: login,
         photoURL: photo,
       });
       const updatedUser = auth.currentUser;
+      const userDocRef = doc(db, "users", updatedUser.uid);
+      await setDoc(userDocRef, {
+        username: updatedUser.displayName,
+        email: updatedUser.email,
+        userId: updatedUser.uid,
+        photo: updatedUser.photoURL,
+      });
       return {
-        user: {
-          username: updatedUser.displayName,
-          email: updatedUser.email,
-          userId: updatedUser.uid,
-          photo: updatedUser.photoURL,
-        },
+        username: updatedUser.displayName,
+        email: updatedUser.email,
+        userId: updatedUser.uid,
+        photo: updatedUser.photoURL,
       };
     } catch (error) {
       Alert.alert(error.message);
@@ -44,12 +50,10 @@ export const login = createAsyncThunk(
     try {
       const { user } = await signInWithEmailAndPassword(auth, email, password);
       return {
-        user: {
-          username: user.displayName,
-          email: user.email,
-          userId: user.uid,
-          photo: user.photoURL,
-        },
+        username: user.displayName,
+        email: user.email,
+        userId: user.uid,
+        photo: user.photoURL,
       };
     } catch (error) {
       Alert.alert(error.message);
@@ -74,10 +78,26 @@ export const refresh = createAsyncThunk(
   "auth/refresh",
   async (setUser, { rejectWithValue }) => {
     try {
-      await onAuthStateChanged(auth, (user) => setUser(user));
+       onAuthStateChanged(auth, (user) => setUser(user));
     } catch (error) {
       Alert.alert(error.message);
       return rejectWithValue(error.message);
     }
   }
 );
+  
+export const updatePhoto = createAsyncThunk("auth/updatePhoto", async ({ userId, photo }, { rejectWithValue }) => {
+  try {
+    await updateProfile(auth.currentUser, {
+      photoURL: photo,
+    });
+    const userDocRef = doc(db, "users", userId);
+    await setDoc(userDocRef, {photo}, { merge: true }); 
+    return {
+      photo: photo,
+    };
+  } catch (error) {
+    Alert.alert(error.message);
+    return rejectWithValue(error.message);
+  }
+});

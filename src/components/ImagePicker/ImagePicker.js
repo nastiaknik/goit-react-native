@@ -1,12 +1,19 @@
 import { TouchableOpacity } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import { useSelector, useDispatch } from "react-redux";
+import { selectUser } from "../../redux/auth/selectors";
+import { updatePhoto } from "../../redux/auth/operations";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import styles from "./ImagePickerStyles";
 
 const ImagePickerComponent = ({ selectedImageUri, setSelectedImageUri }) => {
+  const { userId } = useSelector(selectUser);
+  const dispatch = useDispatch();
+
   const selectImage = async () => {
     if (selectedImageUri) {
       setSelectedImageUri(null);
+      dispatch(updatePhoto({ userId, photo: null }));
       return;
     }
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -23,6 +30,7 @@ const ImagePickerComponent = ({ selectedImageUri, setSelectedImageUri }) => {
     if (!result.canceled && result.assets && result.assets.length > 0) {
       const asset = result.assets[0];
       setSelectedImageUri(asset.uri);
+      dispatch(updatePhoto({ userId, photo: asset.uri }));
     }
   };
 

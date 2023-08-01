@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     fontFamily: "Roboto-Medium",
     fontSize: 16,
-    lineHeight: 19,
+    lineHeight: 20,
     color: "#212121",
   },
   infoWrapper: {
