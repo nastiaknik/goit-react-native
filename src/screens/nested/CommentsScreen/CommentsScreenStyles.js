@@ -17,10 +17,10 @@ export default styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19,
     fontFamily: "Roboto-Regular",
+    height: 50,
   },
   input: {
     position: "relative",
-    height: 50,
     width: "100%",
     borderColor: "#E8E8E8",
     borderWidth: 1,
@@ -44,6 +44,7 @@ export default styles = StyleSheet.create({
     width: "100%",
     overflow: "hidden",
     borderRadius: 8,
+    marginBottom: 32
   },
   date: {
     fontSize: 10,
@@ -78,6 +79,6 @@ export default styles = StyleSheet.create({
   },
   commentList: {
     justifyContent: "space-between",
-    marginTop: 32,
+    marginBottom: 32,
   },
 });

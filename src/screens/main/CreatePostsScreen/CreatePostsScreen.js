@@ -3,6 +3,9 @@ import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import CameraComponent from "../../../components/Camera/Camera";
 import LocationComponent from "../../../components/Location/Location";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../../redux/auth/selectors";
+import { uploadDoc, uploadPhoto } from "../../../firebase/firebaseAPI";
 import {
   View,
   TextInput,
@@ -15,6 +18,7 @@ import { Feather } from "@expo/vector-icons";
 import styles from "./CreatePostsScreenStyles";
 
 const CreatePostsScreen = () => {
+  const { userId } = useSelector(selectUser);
   const [photo, setPhoto] = useState(null);
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState(null);
@@ -30,6 +34,7 @@ const CreatePostsScreen = () => {
     title,
     location,
     locationDescription,
+    userId,
     createdAt: new Date().toISOString(),
   };
 
@@ -53,10 +58,12 @@ const CreatePostsScreen = () => {
     setPhoto(null);
   };
 
-  const handlePublish = () => {
+  const handlePublish = async () => {
     Keyboard.dismiss();
     handleClear();
-    navigation.navigate("Posts", { post });
+    const photoURI = await uploadPhoto(photo, "posts");
+    await uploadDoc("posts", { ...post, photo: photoURI, userId });
+    navigation.navigate("Posts");
   };
 
   const handleClear = () => {
