@@ -135,7 +135,7 @@ const PostsScreen = () => {
                       navigation.navigate("Comments", { post: item });
                     }}
                   >
-                    <FontAwesome name="comment-o" size={24} color="#BDBDBD" />
+                    <FontAwesome name="comment-o" size={18} color="#BDBDBD" />
                     <Text style={styles.postComments}>
                       {commentsCount[item.id] || 0}
                     </Text>

@@ -5,7 +5,7 @@ import CameraComponent from "../../../components/Camera/Camera";
 import LocationComponent from "../../../components/Location/Location";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../redux/auth/selectors";
-import { uploadDoc } from "../../../firebase/firebaseAPI";
+import { uploadDoc, uploadPhoto } from "../../../firebase/firebaseAPI";
 import {
   View,
   TextInput,
@@ -61,7 +61,8 @@ const CreatePostsScreen = () => {
   const handlePublish = async () => {
     Keyboard.dismiss();
     handleClear();
-    await uploadDoc("posts", { ...post, userId });
+    const photoURI = await uploadPhoto(photo, "posts");
+    await uploadDoc("posts", { ...post, photo: photoURI, userId });
     navigation.navigate("Posts");
   };
 

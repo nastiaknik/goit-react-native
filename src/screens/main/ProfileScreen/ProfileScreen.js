@@ -9,11 +9,10 @@ import {
   Text,
   FlatList,
 } from "react-native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "./../../../redux/auth/operations";
-import { useSelector } from "react-redux";
 import { selectUser } from "../../../redux/auth/selectors";
-import { getCollection } from "../../../firebase/firebaseAPI";
+import { getCollection, getDocsCount } from "../../../firebase/firebaseAPI";
 import {
   FontAwesome,
   AntDesign,
@@ -30,6 +29,7 @@ const ProfileScreen = () => {
   const bgImage = getResponsiveImage();
   const { username, photo, userId } = useSelector(selectUser);
   const [posts, setPosts] = useState([]);
+  const [commentsCount, setCommentsCount] = useState({});
   const [selectedImageUri, setSelectedImageUri] = useState(photo);
   const [screenDimensions, setScreenDimensions] = useState(
     Dimensions.get("window")
@@ -41,6 +41,33 @@ const ProfileScreen = () => {
       await getCollection("posts", userId, setPosts);
     })();
   }, []);
+
+  const getCommentsCount = async (postId) => {
+    try {
+      const commentsCount = await getDocsCount(`posts/${postId}/comments`);
+      setCommentsCount((prev) => ({
+        ...prev,
+        [postId]: commentsCount,
+      }));
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchCommentsCounts = async () => {
+      try {
+        const fetchCommentsCount = posts.map((post) =>
+          getCommentsCount(post.id)
+        );
+        await Promise.all(fetchCommentsCount);
+      } catch (error) {
+        console.error("Error fetching comments counts:", error);
+      }
+    };
+
+    fetchCommentsCounts();
+  }, [posts]);
 
   useEffect(() => {
     const handleOrientationChange = ({ window: { width, height } }) => {
@@ -117,7 +144,9 @@ const ProfileScreen = () => {
                         }
                       >
                         <FontAwesome name="comment" size={18} color="#FF6C00" />
-                        <Text style={styles.postComments}>0</Text>
+                        <Text style={styles.postComments}>
+                          {commentsCount[item.id] || 0}
+                        </Text>
                       </TouchableOpacity>
                       <TouchableOpacity style={styles.btn}>
                         <AntDesign name="like2" size={18} color="#FF6C00" />

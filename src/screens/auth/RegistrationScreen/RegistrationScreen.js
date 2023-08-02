@@ -14,6 +14,7 @@ import {
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { register } from "./../../../redux/auth/operations";
+import { uploadPhoto } from "../../../firebase/firebaseAPI";
 import ImagePickerComponent from "../../../components/ImagePicker/ImagePicker";
 import { getResponsiveImage } from "../../../utils/getResponsiveImage";
 import {
@@ -48,13 +49,18 @@ const RegistrationScreen = () => {
     Dimensions.addEventListener("change", handleOrientationChange);
   }, []);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (
       validateLogin(login) &&
       validateEmail(email) &&
       validatePassword(password)
     ) {
-      dispatch(register({ email, password, login, photo: selectedImageUri }));
+      if (selectedImageUri) {
+        const photoURI = await uploadPhoto(selectedImageUri, "avatars");
+        dispatch(register({ email, password, login, photo: photoURI }));
+        return;
+      }
+      dispatch(register({ email, password, login }));
       keyboardHide();
       setLogin("");
       setEmail("");

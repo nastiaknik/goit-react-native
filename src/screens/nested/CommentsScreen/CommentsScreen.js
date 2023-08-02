@@ -2,10 +2,7 @@ import { useState, useEffect } from "react";
 const { format } = require("date-fns");
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../redux/auth/selectors";
-import {
-  uploadDoc,
-  getAllCollections,
-} from "../../../firebase/firebaseAPI";
+import { uploadDoc, getAllCollections } from "../../../firebase/firebaseAPI";
 
 import {
   View,
@@ -23,8 +20,7 @@ import styles from "./CommentsScreenStyles";
 
 function formatDate(date) {
   const parsedDate = new Date(date);
-  return format(parsedDate,   
-"dd MMMM',' yyyy | HH:mm", {
+  return format(parsedDate, "dd MMMM',' yyyy | HH:mm", {
     locale: require("date-fns/locale/uk"),
   });
 }
@@ -61,9 +57,9 @@ const CommentsScreen = ({ route }) => {
       message,
       createdAt: new Date().toISOString(),
     };
-      const updatedComments = [...comments, newComment];
-  updatedComments.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
-  setComments(updatedComments);
+    const updatedComments = [...comments, newComment];
+    updatedComments.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+    setComments(updatedComments);
     setMessage("");
     setIsShowKeyboard(false);
     Keyboard.dismiss();

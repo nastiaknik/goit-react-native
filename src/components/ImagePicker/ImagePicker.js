@@ -3,6 +3,7 @@ import * as ImagePicker from "expo-image-picker";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUser } from "../../redux/auth/selectors";
 import { updatePhoto } from "../../redux/auth/operations";
+import { uploadPhoto } from "../../firebase/firebaseAPI";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import styles from "./ImagePickerStyles";
 
@@ -30,7 +31,8 @@ const ImagePickerComponent = ({ selectedImageUri, setSelectedImageUri }) => {
     if (!result.canceled && result.assets && result.assets.length > 0) {
       const asset = result.assets[0];
       setSelectedImageUri(asset.uri);
-      dispatch(updatePhoto({ userId, photo: asset.uri }));
+      const photoURI = await uploadPhoto(asset.uri, "avatars");
+      dispatch(updatePhoto({ userId, photo: photoURI }));
     }
   };
 
