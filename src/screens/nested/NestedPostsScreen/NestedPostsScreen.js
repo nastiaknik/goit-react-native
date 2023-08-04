@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity, Dimensions } from "react-native";
+import { useDispatch } from "react-redux";
+import { logout } from "./../../../redux/auth/operations";
 
 import PostsScreen from "../PostsScreen/PostsScreen";
 import CommentsScreen from "../CommentsScreen/CommentsScreen";
@@ -11,6 +13,7 @@ import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import createStyles from "./NestedPostsScreenStyles";
 
 const NestedScreen = ({ route }) => {
+  const dispatch = useDispatch();
   const { Navigator, Screen } = createStackNavigator();
   const navigation = useNavigation();
   const [screenDimensions, setScreenDimensions] = useState(
@@ -26,7 +29,7 @@ const NestedScreen = ({ route }) => {
   }, []);
 
   const handleLogout = () => {
-    navigation.navigate("Login");
+    dispatch(logout());
   };
 
   const handleGoBack = () => {

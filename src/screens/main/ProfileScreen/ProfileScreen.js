@@ -9,6 +9,10 @@ import {
   Text,
   FlatList,
 } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "./../../../redux/auth/operations";
+import { selectUser } from "../../../redux/auth/selectors";
+import { getCollection, getDocsCount } from "../../../firebase/firebaseAPI";
 import {
   FontAwesome,
   AntDesign,
@@ -19,23 +23,51 @@ import { getResponsiveImage } from "../../../utils/getResponsiveImage";
 import createStyles from "./ProfileScreenStyles";
 import ImagePickerComponent from "../../../components/ImagePicker/ImagePicker";
 
-const ProfileScreen = ({ route }) => {
+const ProfileScreen = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const bgImage = getResponsiveImage();
+  const { username, photo, userId } = useSelector(selectUser);
   const [posts, setPosts] = useState([]);
-  const [selectedImageUri, setSelectedImageUri] = useState(null);
-  const [username, setUsername] = useState("Username");
+  const [commentsCount, setCommentsCount] = useState({});
+  const [selectedImageUri, setSelectedImageUri] = useState(photo);
   const [screenDimensions, setScreenDimensions] = useState(
     Dimensions.get("window")
   );
   const styles = createStyles(screenDimensions);
 
   useEffect(() => {
-    const { post, userData } = route.params;
-    post && setPosts((prevState) => [...prevState, post]);
-    userData?.login && setUsername(userData.login);
-    userData?.photo && setSelectedImageUri(userData.photo);
-  }, [route.params]);
+    (async () => {
+      await getCollection("posts", userId, setPosts);
+    })();
+  }, []);
+
+  const getCommentsCount = async (postId) => {
+    try {
+      const commentsCount = await getDocsCount(`posts/${postId}/comments`);
+      setCommentsCount((prev) => ({
+        ...prev,
+        [postId]: commentsCount,
+      }));
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchCommentsCounts = async () => {
+      try {
+        const fetchCommentsCount = posts.map((post) =>
+          getCommentsCount(post.id)
+        );
+        await Promise.all(fetchCommentsCount);
+      } catch (error) {
+        console.error("Error fetching comments counts:", error);
+      }
+    };
+
+    fetchCommentsCounts();
+  }, [posts]);
 
   useEffect(() => {
     const handleOrientationChange = ({ window: { width, height } }) => {
@@ -46,7 +78,7 @@ const ProfileScreen = ({ route }) => {
   }, []);
 
   const handleLogout = () => {
-    navigation.navigate("Login");
+    dispatch(logout());
   };
 
   const handleLocationDescr = (location) => {
@@ -89,7 +121,7 @@ const ProfileScreen = ({ route }) => {
                       />
                     </TouchableOpacity>
                   </View>
-                  <Text style={styles.username}>{username}</Text>
+                  <Text style={styles.username}>{username || "Username"}</Text>
                 </>
               );
             } else {
@@ -112,7 +144,9 @@ const ProfileScreen = ({ route }) => {
                         }
                       >
                         <FontAwesome name="comment" size={18} color="#FF6C00" />
-                        <Text style={styles.postComments}>0</Text>
+                        <Text style={styles.postComments}>
+                          {commentsCount[item.id] || 0}
+                        </Text>
                       </TouchableOpacity>
                       <TouchableOpacity style={styles.btn}>
                         <AntDesign name="like2" size={18} color="#FF6C00" />
